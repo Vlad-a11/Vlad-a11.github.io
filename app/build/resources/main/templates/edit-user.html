@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User Profile</title>
+</head>
+<body>
+    <h1>Edit User Profile</h1>
+    <form th:action="@{/users/{id}/edit(id=${user.id})}" th:object="${user}" method="post" enctype="multipart/form-data">        
+        <input type="hidden" th:field="*{id}">
+        <label>Name:</label>
+        <input type="text" th:field="*{name}"><br><br>
+        <label>Email:</label>
+        <input type="text" th:field="*{email}"><br><br>
+        <button type="submit" onclick="saveUser()">Save</button>
+        <button type="button" onclick="goBack()">Cancel</button>
+    </form>
+
+    <script>
+        function saveUser() {
+            // Получаем данные из формы
+            var form = event.target.form;
+            var id = form.id.value;
+            var name = form.name.value;
+            var email = form.email.value;
+
+            // Создаем объект FormData для передачи данных формы, включая файлы
+            var formData = new FormData();
+            formData.append("id", id);
+            formData.append("name", name);
+            formData.append("email", email);
+
+            // Отправляем AJAX-запрос на сервер
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/users/{id}/edit(id=" + id + ")");
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // При успешном сохранении данных, отображаем сообщение
+                    alert("Данные успешно сохранены в базу данных!");
+                } else {
+                    // При ошибке сохранения данных, отображаем сообщение об ошибке
+                    alert("Произошла ошибка при сохранении данных.");
+                }
+            };
+            xhr.send(formData);
+
+            return false; // Чтобы форма не отправлялась обычным способом
+        }
+
+        function goBack() {
+            window.history.back(); // Вернуться на предыдущую страницу
+        }
+    </script>
+</body>
+</html>

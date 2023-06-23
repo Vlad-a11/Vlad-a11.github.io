@@ -1,0 +1,1 @@
+web: java -jar profile/app/build/libs/app-1.0.0.jar
